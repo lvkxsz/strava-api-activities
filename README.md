@@ -5,6 +5,16 @@ Functions are intended for use with individual Strava accounts and for deploymen
 
 ## Configuration
 
+```mermaid
+graph LR;
+scheduler[Cloud Scheduler] -->|scheduled<br>message| pubsub[Pub/Sub]
+pubsub -->|trigger| functions[Cloud Functions]
+secrets[Secret Manager] -->|api keys| functions
+functions <-->|get activities| strava[Strava API]
+functions -->|json| gcs[Cloud Storage]
+gcs -->|load| bq[BigQuery]
+```
+
 - Set up API application on Strava and retrieve Client ID, Client Secret, Refresh Token
 - Store API Client Secret and Refresh Token in GCP Secret Manager
 - Create an output bucket on Cloud Storage
@@ -17,6 +27,7 @@ Functions are intended for use with individual Strava accounts and for deploymen
     - Configure environment variables as described below
     - Set Pub/Sub topic configured above as trigger
     - Set extract_strava_activities as entry point
+- Create a BigQuery dataset and ingest from GCS as required
 
 ## Environment Variables
 
