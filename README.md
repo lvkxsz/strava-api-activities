@@ -1,7 +1,7 @@
 # About
 
 Python functions to extract Strava athlete activities from [Strava API](https://developers.strava.com/), upload them to Google Cloud Storage for ingestion into BigQuery, and produce simple visualisations.
-Functions are intended for use with individual Strava accounts and are ready deployment on GCP Cloud Functions.
+Functions are intended for use with individual Strava accounts and are ready for deployment on GCP Cloud Functions.
 
 # Deploying strava_bq_etl.py
 
