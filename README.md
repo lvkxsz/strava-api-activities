@@ -1,9 +1,9 @@
-# strava-api-gcp
+# About
 
-Python functions to extract Strava athlete activities from [Strava API](https://developers.strava.com/) and output to Google Cloud Storage.
-Functions are intended for use with individual Strava accounts and for deployment on GCP Cloud Functions.
+Python functions to extract Strava athlete activities from [Strava API](https://developers.strava.com/), upload them to Google Cloud Storage for ingestion into BigQuery, and produce simple visualisations.
+Functions are intended for use with individual Strava accounts and are ready deployment on GCP Cloud Functions.
 
-## Configuration
+# Deploying strava_bq_etl.py
 
 ```mermaid
 graph LR;
@@ -45,7 +45,7 @@ Note that Strava API is rate limited to 100 requests/15min and 1,000 requests/da
 
 ## Loading to BigQuery
 
-SQL to load JSON activity file from Cloud Storage to BigQuery:
+SQL to load JSON activity file from Cloud Storage to BigQuery (use a Scheduled Query or similar):
 
 ```sql
 load data overwrite dataset.table (
@@ -125,3 +125,18 @@ load data overwrite dataset.table (
 )
 from files (format='newline_delimited_json', uris=['gs://bucket/activities.json']);
 ```
+
+# Deploying strava_bq_progress_charts.py
+
+These functions generate simple high level visualisations of Run and Ride activities using matplotlib and seaborn libraries, where each data point is a daily aggregation of activities. Assumption is that the data is readily available on BigQuery as outlined above. 
+
+The code can be deployed on Cloud Functions and triggered independently or following the execution of above ETL routines. Outputs are uploaded as PNG files to Cloud Storage, examples below.
+
+progress_chart_run.png
+![Figure 2023-12-31 172344](https://github.com/lvkxsz/strava-api-activities/assets/139178737/18ebdeaf-608d-4f0a-a8cf-12824ee55146)
+
+progress_chart_ride_speed.png
+![Figure 2023-12-31 172410](https://github.com/lvkxsz/strava-api-activities/assets/139178737/7afc59dd-b611-4515-94fa-6166dcba78fa)
+
+progress_chart_ride_power.png
+![Figure 2023-12-31 172438](https://github.com/lvkxsz/strava-api-activities/assets/139178737/4aa32cde-fd11-44ce-a42b-664d14b66dfe)
